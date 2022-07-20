@@ -35,7 +35,7 @@ open array has a fixed size. Still, a pretty cool algorithm if you'd ask me!
 
 int main(int argc, char *argv[])
 {
-    int numDots = 1;
+    int numDots;
 
     // command line arguments lesgooo
     // taking input in c is a pain -_-
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         numDots = argv[1][0] - '0';
     }
 
-    const int width = 10, height = 10;
+    const int width = 40, height = 40;
     const int startX = 0, startY = 0;
     const int goalX = width - 1, goalY = height - 1;
 
@@ -62,24 +62,28 @@ int main(int argc, char *argv[])
     // initialize grid
     Grid *g = getGrid(width, height, numDots);
 
+    printf("Initial grid:\n");
     printGrid(g);
-
-    // visually seperate the "vanilla" grid and the solved one
-    printf("<----------------------------------------------->\n");
 
     // to record the path
     Cell *path[MAX_PATH_LENGTH];
+    // fill with initial 0s
+    for (int i = 0; i < MAX_PATH_LENGTH; i++)
+    {
+        path[i] = NULL;
+    }
 
     // how fast is it really?
     start = clock();
 
-    int fail = getPath(g, startX, startY, goalX, goalY, path);
+    int fail = pathfind(g, startX, startY, goalX, goalY, path);
 
     // probably slower than it COULD be
     stop = clock();
 
     if (!fail)
     {
+        printf("Finished path:\n");
         printGrid(g);
 
         // time in clock sycles divided by CLOCKS_PER_SEC is time in seconds, which if multiplied by 1000 gives time in milliseconds,

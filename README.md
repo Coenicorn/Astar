@@ -27,6 +27,11 @@ const int width = 20, height = 20;
 ...
 ```
 
+### NOTE
+When the width and height get too great, a segmentation fault can occur because the open
+array is too small, in this case the MAX_OPEN_LENGTH value should be made greater.
+I tried my best to fix it, but my understanding of errors and c is not good enough :(
+
 If you're able to run the code, I'm sure you're smart enough to alter some source code ;)
 
 Thanks for reading this lol, didn't expect anyone to do that tbh

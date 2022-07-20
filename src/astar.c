@@ -8,16 +8,22 @@
 double heuristic(int dX, int dY)
 {
     return sqrt(dX * dX + dY * dY);
+    // return dX + dY;
 }
 
 int squeezeOpen(Cell *openIn[MAX_OPEN_LENGTH])
 {
     int i, j;
-    for (i = j = 0; i < MAX_OPEN_LENGTH-1; i++)
+    for (i = j = 0; i < MAX_OPEN_LENGTH; i++)
     {
         // check for existing cell and if it is open
         if (openIn[i] != NULL)
-            openIn[j++] = openIn[i];
+        {
+            if (openIn[i]->value == V_OPEN)
+                openIn[j++] = openIn[i];
+            else
+                openIn[i] = NULL;
+        }
     }
     return j;
 }
@@ -50,12 +56,12 @@ void onNeighbour(Grid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLength,
     }
 }
 
-int getPath(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[MAX_PATH_LENGTH])
+int pathfind(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[MAX_PATH_LENGTH])
 {
     // check if the start and end positions are valid
     if (!isValidPosition(g, startX, startY) || !isValidPosition(g, goalX, goalY))
         return 1;
-    
+
     // set start cell to open
     Cell *s = &g->data[startY][startY];
     s->value = V_OPEN;
@@ -71,7 +77,7 @@ int getPath(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_ou
     open[0] = s;
 
     // initialize length of open array, the first item in the array is already open; hence the value 1
-    int openLength = 1;
+    int openLength = 0;
 
     int pathFound = 0;
 
@@ -83,6 +89,9 @@ int getPath(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_ou
         // get the amount of cells in the front of the open array
         openLength = squeezeOpen(open);
 
+        if (openLength >= MAX_OPEN_LENGTH-1)
+            break;
+        
         // record best F score
         double lowestF = INFINITY;
 
@@ -129,16 +138,33 @@ int getPath(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_ou
 
     // backtrack
 
-    int i = 0;
-    while (1)
+    // if we don't want a path
+    if (path_out == NULL)
     {
-        current->value = V_PATH;
-        path_out[i] = current;
+        while (1)
+        {
+            current->value = V_PATH;
 
-        if (!current->parent)
-            break;
+            if (!current->parent)
+                break;
 
-        current = current->parent;
+            current = current->parent;
+        }
+    }
+    // if we do want a path
+    else
+    {
+        int i = 0;
+        while (1)
+        {
+            current->value = V_PATH;
+            path_out[i] = current;
+
+            if (!current->parent)
+                break;
+
+            current = current->parent;
+        }
     }
 
     return 0;
