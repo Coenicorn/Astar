@@ -84,6 +84,10 @@ Grid *getGrid(int w, int h, int numDots)
 
 void freeGrid(Grid *g)
 {
+    for (int i = 0, l = g->h; i < l; i++)
+    {
+        free(g->data[i]);
+    }
     free(g->data);
     free(g);
 }

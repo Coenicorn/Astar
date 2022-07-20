@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     }
     else
     {
+        // cheeky char to int conversion
         numDots = argv[1][0] - '0';
     }
 
@@ -88,7 +89,7 @@ int main(int argc, char *argv[])
 
         // time in clock sycles divided by CLOCKS_PER_SEC is time in seconds, which if multiplied by 1000 gives time in milliseconds,
         // which is clearer to cool programmers like myself than seconds
-        printf("\nProgram took %f milliseconds to complete\n", (double)(stop - start) / CLOCKS_PER_SEC * 1000);
+        printf("Program took %f milliseconds to complete\n", (double)(stop - start) / CLOCKS_PER_SEC * 1000);
     }
     else
         printf("No path possible!\n");

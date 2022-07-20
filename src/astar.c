@@ -89,7 +89,7 @@ int pathfind(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_o
         // get the amount of cells in the front of the open array
         openLength = squeezeOpen(open);
 
-        if (openLength >= MAX_OPEN_LENGTH-1)
+        if (openLength >= MAX_OPEN_LENGTH)
             break;
         
         // record best F score
