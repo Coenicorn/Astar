@@ -19,7 +19,7 @@ to run the program.
 It takes one command line argument; the amount of obstacles in the grid.
 This is a single digit, so no higher than 9 I'm afraid!
 
-The default size of the grid is 20x20, but you can alter this in the "main.c" file:
+The default size of the grid is 10x10, but you can alter this in the "main.c" file:
 
 ```
 ...

@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         numDots = argv[1][0] - '0';
     }
 
-    const int width = 20, height = 20;
+    const int width = 10, height = 10;
     const int startX = 0, startY = 0;
     const int goalX = width - 1, goalY = height - 1;
 

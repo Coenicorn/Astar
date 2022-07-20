@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <cell.h>
 
-// for visualization
+// for visualization, corresponds to the V_* values (any V_DEFAULT cell will be shown as a space, 
+// any V_OPEN cell will be shown as +, etc.)
 const char output_values[5] = {' ', '+', '-', '/', '@'};
 
 int isValidPosition(Grid *g, int x, int y)
