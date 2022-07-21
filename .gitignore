@@ -3,3 +3,5 @@ bin
 .vscode
 !example/build
 !example/bin
+example/build/*
+src/main.c
