@@ -2,8 +2,12 @@ EXEC := ./build/main.out
 
 SRCDIR := ./src
 
-CFLAGS := -Wall -g -I$(SRCDIR)/
-LDLIBS := -ldl -lm -L$(SRCDIR)/
+BINDIR := ./bin
+LIBDIR := ./lib
+
+CFLAGS := -Wall -g -I$(SRCDIR)/ -I$(LIBDIR)/
+LFLAGS := -L$(SRCDIR)/ -L$(BINDIR)/
+LDFLAGS := -lm
 
 SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(SRCS:.c=.o)
@@ -14,7 +18,7 @@ RM := rm -rf
 	$(CC) $< $(CFLAGS) -c -o $@
 
 build: $(OBJS)
-	$(CC) $^ $(CFLAGS) $(LDFLAGS) -o $(EXEC) $(LDLIBS)
+	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $(EXEC) $(LDFLAGS)
 	# $(MAKE) clean
 
 clean:
