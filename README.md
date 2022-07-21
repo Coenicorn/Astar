@@ -12,25 +12,27 @@ If you want to run the program, run the "make" command in the src directory. Thi
 build an executable into the build directory. It IS written in linux, so I'm not sure if 
 it'll run on windows, but I'm sure you'll figure it out ;)
 You can then run it by running (assuming you're in the astar directory):
+
 ```
 ./build/main 0
 ```
+
 to run the program.
 It takes one command line argument; the amount of obstacles in the grid.
 This is a single digit, so no higher than 9 I'm afraid!
+
+### NOTE
+Since the program generates the obstacles randomly, there is a chance that the start of end is
+completely blocked, and a path is thus impossible, in which case the program will output "No path possible!". 
+You might have to run it a few times to get a randomly generated grid where a path is possible.
 
 The default size of the grid is 10x10, but you can alter this in the "main.c" file:
 
 ```
 ...
-const int width = 20, height = 20;
+const int width = 10, height = 10;
 ...
 ```
-
-### NOTE
-When the width and height get too great, a segmentation fault can occur because the open
-array is too small, in this case the MAX_OPEN_LENGTH value should be made greater.
-I tried my best to fix it, but my understanding of errors and c is not good enough :(
 
 If you're able to run the code, I'm sure you're smart enough to alter some source code ;)
 
