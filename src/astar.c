@@ -1,3 +1,30 @@
+/*
+
+C implementation of the A* pathfinding algorithm.
+Probably way longer than it needs to be, but frankly, I don't really care lol.
+
+To use this implementation, define a grid (as per the Grid struct) and call the getPath() function with
+correct arguments.
+
+There is a path returned (an array of pointers to the cells in the grid) but I don't use it as this implementation is mostly just to look cool
+and for me to feel slightly good about my programming skills (which is very illjustified lol).
+
+If you're actually reading this, enjoy! (What are you doing tho?)
+
+As for other programmers reading this:
+
+The maximum time complexity of this program is still the same as that of floodfill,
+because in the worst case scenario you'll still have to traverse all the cells in the grid.
+The best case scenario is quite a bit better though, as the heuristic kind of "guides" the pathfinding
+towards the target as opposed to just filling everything and randomly stumbling across the
+path like floodfill does.
+
+The space complexity is pretty bad, as all the cells in the grid are stored in memory and the
+open array has a fixed size. Still, a pretty cool algorithm if you'd ask me!
+
+*/
+
+
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
