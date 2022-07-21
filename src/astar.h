@@ -4,10 +4,7 @@
 #include "cell.h"
 #include "grid.h"
 
-#define WEIGHT 1
 #define MAX_PATH_LENGTH 1000
-
-#define SQRT2 1.41421356237
 
 /** Get a generated path from input variables
  * @param g The grid to do the pathfinding in

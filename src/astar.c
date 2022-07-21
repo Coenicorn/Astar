@@ -6,6 +6,10 @@
 #include "grid.h"
 #include "cell.h"
 
+#define WEIGHT 1
+
+#define SQRT2 1.41421356237
+
 const int dirsX[8] = {-1, 0, 1, 0, 1, 1, -1, -1};
 const int dirsY[8] = {0, -1, 0, 1, -1, 1, -1, 1};
 
@@ -82,7 +86,7 @@ int pathfind(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_o
 {
     // no idea if this makes it faster, but it dynamically alters
     // the max open length to match program width and height... maybe idk
-    MAX_OPEN_LENGTH = g->w * g->h / 2 + 8;
+    MAX_OPEN_LENGTH = g->w * g->h;
 
     // check if the start and end positions are valid
     if (!isValidPosition(g, startX, startY))

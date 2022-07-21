@@ -34,29 +34,9 @@ open array has a fixed size. Still, a pretty cool algorithm if you'd ask me!
 #include "astar.h"
 #include "cell.h"
 
-int main(int argc, char *argv[])
+int main()
 {
-    int numObst;
-
-    // command line arguments lesgooo
-    // taking input in c is a pain -_-
-    if (argc != 2)
-    {
-        printf("Expected one digit for the number of obstacles in the grid!\n");
-        return 1;
-    }
-    else
-    {
-        numObst = atoi(argv[1]);
-
-        if (numObst < 0)
-        {
-            printf("Expected a positive number for number of obstacles in the grid!\n");
-            return 1;
-        }
-    }
-                                                                                            
-    const int width = 30, height = 30;
+    const int width = 10, height = 10, numObst = 2;
     const int startX = 0, startY = 0;
     const int goalX = width - 1, goalY = height - 1;
 
@@ -113,7 +93,6 @@ int main(int argc, char *argv[])
 //     int sX = 0, sY = 0, gX = w-1, gY = h-1;
 //     time_t start, stop;
 //     Grid *g;
-
 
 //     for (int i = 1; i <= num_iter; i++)
 //     {

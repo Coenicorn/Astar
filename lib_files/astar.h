@@ -7,13 +7,7 @@
 #define V_BLOCKED 3
 #define V_PATH 4
 
-#define WALKABLE_CHANCE .2
-
-#define WEIGHT 1
 #define MAX_PATH_LENGTH 1000
-
-#define SQRT2 1.41421356237
-
 typedef struct Cell
 {
     int x, y;
