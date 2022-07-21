@@ -1,9 +1,15 @@
-#include <astar.h>
-#include <grid.h>
-#include <cell.h>
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "astar.h"
+#include "grid.h"
+#include "cell.h"
+
+const int dirsX[8] = {-1, 0, 1, 0, 1, 1, -1, -1};
+const int dirsY[8] = {0, -1, 0, 1, -1, 1, -1, 1};
+
+int MAX_OPEN_LENGTH;
 
 double heuristic(int dX, int dY)
 {
@@ -11,10 +17,15 @@ double heuristic(int dX, int dY)
     // return dX + dY;
 }
 
-int squeezeOpen(Cell *openIn[MAX_OPEN_LENGTH])
+void squeezeOpen(Cell *openIn[MAX_OPEN_LENGTH], int *len)
 {
+    *len += 8;
+
+    if (*len >= MAX_OPEN_LENGTH)
+        *len = MAX_OPEN_LENGTH;
+
     int i, j;
-    for (i = j = 0; i < MAX_OPEN_LENGTH; i++)
+    for (i = j = 0; i < *len; i++)
     {
         // check for existing cell and if it is open
         if (openIn[i] != NULL)
@@ -25,16 +36,19 @@ int squeezeOpen(Cell *openIn[MAX_OPEN_LENGTH])
                 openIn[i] = NULL;
         }
     }
-    return j;
+
+    *len = j;
 }
 
-void onNeighbour(Grid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLength, int dX, int dY, int goalX, int goalY)
+int onNeighbour(Grid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLength, int goalX, int goalY, int dir)
 {
+    int dX = dirsX[dir], dY = dirsY[dir];
+
     int x = p->x + dX, y = p->y + dY;
 
     // check if neighbour position is inside grid
     if (!isValidPosition(g, x, y) || g->data[y][x].value == V_CLOSED)
-        return;
+        return 0;
 
     Cell *n = &g->data[y][x];
 
@@ -52,15 +66,35 @@ void onNeighbour(Grid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLength,
 
         n->value = V_OPEN;
 
-        open[++*openLength] = n;
+        *openLength += 1;
+
+        // check if the open array has overflown
+        if (*openLength >= MAX_OPEN_LENGTH)
+            return 1;
+
+        open[*openLength] = n;
     }
+
+    return 0;
 }
 
-int pathfind(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[MAX_PATH_LENGTH])
+int pathfind(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[])
 {
+    // no idea if this makes it faster, but it dynamically alters
+    // the max open length to match program width and height... maybe idk
+    MAX_OPEN_LENGTH = g->w * g->h / 2 + 8;
+
     // check if the start and end positions are valid
-    if (!isValidPosition(g, startX, startY) || !isValidPosition(g, goalX, goalY))
+    if (!isValidPosition(g, startX, startY))
+    {
+        printf("**Start position is not in grid bounds\n**");
         return 1;
+    }
+    if (!isValidPosition(g, goalX, goalY))
+    {
+        printf("**Goal position is not in grid bounds**\n");
+        return 1;
+    }
 
     // set start cell to open
     Cell *s = &g->data[startY][startY];
@@ -77,21 +111,18 @@ int pathfind(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_o
     open[0] = s;
 
     // initialize length of open array, the first item in the array is already open; hence the value 1
-    int openLength = 0;
+    int openLength = 1;
 
     int pathFound = 0;
 
-    Cell *current;
+    Cell *current = open[0];
 
     // main pathfinding loop
     while (!pathFound)
     {
         // get the amount of cells in the front of the open array
-        openLength = squeezeOpen(open);
+        squeezeOpen(open, &openLength);
 
-        if (openLength >= MAX_OPEN_LENGTH)
-            break;
-        
         // record best F score
         double lowestF = INFINITY;
 
@@ -122,19 +153,22 @@ int pathfind(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_o
         current->value = V_CLOSED;
 
         // open all neighbours of the current cell
-        onNeighbour(g, current, open, &openLength, 1, 0, goalX, goalY);
-        onNeighbour(g, current, open, &openLength, -1, 0, goalX, goalY);
-        onNeighbour(g, current, open, &openLength, 0, 1, goalX, goalY);
-        onNeighbour(g, current, open, &openLength, 0, -1, goalX, goalY);
-        onNeighbour(g, current, open, &openLength, 1, 1, goalX, goalY);
-        onNeighbour(g, current, open, &openLength, -1, -1, goalX, goalY);
-        onNeighbour(g, current, open, &openLength, 1, -1, goalX, goalY);
-        onNeighbour(g, current, open, &openLength, -1, 1, goalX, goalY);
+        for (int i = 0; i < 8; i++)
+        {
+            if (onNeighbour(g, current, open, &openLength, goalX, goalY, i))
+            {
+                printf("**Open array overflow**\n");
+                return 1;
+            }
+        }
     }
 
     // loop exited but there's no path, no path is possible
     if (!pathFound)
+    {
+        printf("**No path is possible**\n");
         return 1;
+    }
 
     // backtrack
 

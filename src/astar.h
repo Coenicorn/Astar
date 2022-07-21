@@ -1,13 +1,11 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
-#include <cell.h>
-#include <grid.h>
+#include "cell.h"
+#include "grid.h"
 
 #define WEIGHT 1
 #define MAX_PATH_LENGTH 1000
-
-#define MAX_OPEN_LENGTH 1000
 
 #define SQRT2 1.41421356237
 

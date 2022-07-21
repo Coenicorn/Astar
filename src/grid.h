@@ -1,7 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include <cell.h>
+#include "cell.h"
 
 #define V_DEFAULT 0
 #define V_OPEN 1
@@ -19,13 +19,20 @@ typedef struct Grid
     int len;
 } Grid;
 
-/** Get a grid of cells
+/** Helper function to get a grid with cells with value V_DEFAULT
  * @param w The width of the grid in cells
  * @param h The height of the grid in cells
- * @param numDots The number of dots the grid should have
+ * @returns A grid with cells with value V_DEFAULT
+ * */
+Grid *getGrid(int w, int h);
+
+/** Get a grid of cells with randomized obstacles
+ * @param w The width of the grid in cells
+ * @param h The height of the grid in cells
+ * @param numObstacles The number of obstacles the grid should have
  * @returns A grid filled with cells (see cell.h)
  * */
-Grid *getGrid(int w, int h, int numDots);
+Grid *getRandomGrid(int w, int h, int numObstacles);
 
 /** Frees any given grid from memory
  * @param g The grid to free

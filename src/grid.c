@@ -1,7 +1,8 @@
-#include <grid.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <cell.h>
+
+#include "cell.h"
+#include "grid.h"
 
 // for visualization, corresponds to the V_* values (any V_DEFAULT cell will be shown as a space, 
 // any V_OPEN cell will be shown as +, etc.)
@@ -36,7 +37,7 @@ void dotGrid(Grid *g, int x, int y)
     blockPos(g, x, y - 2);
 }
 
-Grid *getGrid(int w, int h, int numDots)
+Grid *getGrid(int w, int h)
 {
     Grid *out = malloc(sizeof(Grid));
 
@@ -66,11 +67,18 @@ Grid *getGrid(int w, int h, int numDots)
         }
     }
 
+    return out;
+}
+
+Grid *getRandomGrid(int w, int h, int numObstacles)
+{
+    Grid *out = getGrid(w, h);
+
     // if ya don't want no dots, we aint givin' ya no dots!
-    if (!numDots)
+    if (!numObstacles)
         return out;
 
-    for (int i = 0; i < numDots; i++)
+    for (int i = 0; i < numObstacles; i++)
     {
         // random position on grid
         int x = (int)(((float)rand() / (float)RAND_MAX) * w);
