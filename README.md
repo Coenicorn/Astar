@@ -21,10 +21,9 @@ to run the program.
 It takes one command line argument; the amount of obstacles in the grid.
 This is a single digit, so no higher than 9 I'm afraid!
 
-### NOTE
-Since the program generates the obstacles randomly, there is a chance that the start of end is
+***Since the program generates the obstacles randomly, there is a chance that the start of end is
 completely blocked, and a path is thus impossible, in which case the program will output "No path possible!". 
-You might have to run it a few times to get a randomly generated grid where a path is possible.
+You might have to run it a few times to get a randomly generated grid where a path is possible.***
 
 The default size of the grid is 10x10, but you can alter this in the "main.c" file:
 
@@ -33,6 +32,9 @@ The default size of the grid is 10x10, but you can alter this in the "main.c" fi
 const int width = 10, height = 10;
 ...
 ```
+
+***The program doesn't stop you from running it with stupidly large grids, so with very
+large grids this program will suck up all of your precious memory, so watch out with that!***
 
 If you're able to run the code, I'm sure you're smart enough to alter some source code ;)
 
