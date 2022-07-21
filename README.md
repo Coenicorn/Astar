@@ -45,3 +45,5 @@ Thanks for reading this lol, didn't expect anyone to do that tbh
 To use the static library, copy the files in lib_files. There's a header (.h) and a library (.a) file in there.
 To compile with these, link with the .a file with flag "-lastar", and include the .h file. That should be it!
 If you don't know what linking is, what are you doing here? (jk, look it up, it's not that difficult ;))
+Honestly, the fact that I made this is kinda dumb, cuz I don't think even I will use this, but it's fun
+and that's what counts for me!
