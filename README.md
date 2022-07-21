@@ -39,3 +39,9 @@ large grids this program will suck up all of your precious memory, so watch out 
 If you're able to run the code, I'm sure you're smart enough to alter some source code ;)
 
 Thanks for reading this lol, didn't expect anyone to do that tbh
+
+## Static library
+
+To use the static library, copy the files in lib_files. There's a header (.h) and a library (.a) file in there.
+To compile with these, link with the .a file with flag "-lastar", and include the .h file. That should be it!
+If you don't know what linking is, what are you doing here? (jk, look it up, it's not that difficult ;))
