@@ -67,7 +67,7 @@ int isValidPosition(AstarGrid *g, int x, int y);
  * @param goalX The goal position x
  * @param goalY The goal position y
  * @param path_out A predefined path variable of length MAX_PATH_LENGTH, pass NULL if you don't want an output path
- * @returns Integer for program success: 1 for error, 0 for no errors
+ * @returns Length of path; 0 for error
  * */
 int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCell *path_out[MAX_PATH_LENGTH]);
 

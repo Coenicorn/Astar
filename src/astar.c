@@ -111,6 +111,12 @@ int onNeighbour(AstarGrid *g, AstarCell *p, AstarCell *open[MAX_OPEN_LENGTH], in
 
 int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCell *path_out[])
 {
+    if (path_out == NULL)
+    {
+        printf("**Output path isn't defined**\n");
+        return 0;
+    }
+
     // no idea if this makes it faster, but it dynamically alters
     // the max open length to match program width and height... maybe idk
     MAX_OPEN_LENGTH = g->w * g->h;
@@ -118,13 +124,13 @@ int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCe
     // check if the start and end positions are valid
     if (!isValidPosition(g, startX, startY))
     {
-        printf("**Start position is not in grid bounds\n**");
-        return 1;
+        printf("**Start position is not in grid bounds**\n");
+        return 0;
     }
     if (!isValidPosition(g, goalX, goalY))
     {
         printf("**Goal position is not in grid bounds**\n");
-        return 1;
+        return 0;
     }
 
     // set start cell to open
@@ -189,7 +195,7 @@ int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCe
             if (onNeighbour(g, current, open, &openLength, goalX, goalY, i))
             {
                 printf("**Open array overflow**\n");
-                return 1;
+                return 0;
             }
         }
     }
@@ -198,39 +204,28 @@ int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCe
     if (!pathFound)
     {
         printf("**No path is possible**\n");
-        return 1;
+        return 0;
     }
 
     // backtrack
-
-    // if we don't want a path
-    if (path_out == NULL)
+    int i = 0;
+    while (1)
     {
-        while (1)
+        current->value = V_PATH;
+        path_out[i] = current;
+
+        if (i >= MAX_PATH_LENGTH)
         {
-            current->value = V_PATH;
-
-            if (!current->parent)
-                break;
-
-            current = current->parent;
+            printf("**Path longer than MAX_PATH_LENGTH**\n");
+            return 0;
         }
-    }
-    // if we do want a path
-    else
-    {
-        int i = 0;
-        while (1)
-        {
-            current->value = V_PATH;
-            path_out[i] = current;
 
-            if (!current->parent)
-                break;
+        if (!current->parent)
+            break;
 
-            current = current->parent;
-        }
+        i++;
+        current = current->parent;
     }
 
-    return 0;
+    return i;
 }
