@@ -8,18 +8,18 @@
 // any V_OPEN cell will be shown as +, etc.)
 const char output_values[5] = {' ', '+', '-', '/', '@'};
 
-int isValidPosition(Grid *g, int x, int y)
+int isValidPosition(AstarGrid *g, int x, int y)
 {
     return (x >= 0 && x < g->w && y >= 0 && y < g->h);
 }
 
-void blockPos(Grid *g, int x, int y)
+void blockPos(AstarGrid *g, int x, int y)
 {
     if (isValidPosition(g, x, y))
         g->data[y][x].value = V_BLOCKED;
 }
 
-void dotGrid(Grid *g, int x, int y)
+void dotGrid(AstarGrid *g, int x, int y)
 {
     // Hardcoding go brrrrrrrrr
     blockPos(g, x, y);
@@ -37,9 +37,9 @@ void dotGrid(Grid *g, int x, int y)
     blockPos(g, x, y - 2);
 }
 
-Grid *getGrid(int w, int h)
+AstarGrid *newAstarGrid(int w, int h)
 {
-    Grid *out = malloc(sizeof(Grid));
+    AstarGrid *out = malloc(sizeof(AstarGrid));
 
     // initialize two dimensional grid
     out->data = malloc(sizeof(Cell *) * h);
@@ -70,9 +70,9 @@ Grid *getGrid(int w, int h)
     return out;
 }
 
-Grid *getRandomGrid(int w, int h, int numObstacles)
+AstarGrid *newRandomAstarGrid(int w, int h, int numObstacles)
 {
-    Grid *out = getGrid(w, h);
+    AstarGrid *out = newAstarGrid(w, h);
 
     // if ya don't want no dots, we aint givin' ya no dots!
     if (!numObstacles)
@@ -90,7 +90,7 @@ Grid *getRandomGrid(int w, int h, int numObstacles)
     return out;
 }
 
-void freeGrid(Grid *g)
+void freeGrid(AstarGrid *g)
 {
     for (int i = 0, l = g->h; i < l; i++)
     {
@@ -100,7 +100,7 @@ void freeGrid(Grid *g)
     free(g);
 }
 
-void printGrid(Grid *g)
+void printGrid(AstarGrid *g)
 {
     for (int y = 0; y < g->h; y++)
     {

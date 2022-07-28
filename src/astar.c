@@ -3,7 +3,7 @@
 C implementation of the A* pathfinding algorithm.
 Probably way longer than it needs to be, but frankly, I don't really care lol.
 
-To use this implementation, define a grid (as per the Grid struct) and call the getPath() function with
+To use this implementation, define a grid (as per the AstarGrid struct) and call the getPath() function with
 correct arguments.
 
 There is a path returned (an array of pointers to the cells in the grid) but I don't use it as this implementation is mostly just to look cool
@@ -71,7 +71,7 @@ void squeezeOpen(Cell *openIn[MAX_OPEN_LENGTH], int *len)
     *len = j;
 }
 
-int onNeighbour(Grid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLength, int goalX, int goalY, int dir)
+int onNeighbour(AstarGrid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLength, int goalX, int goalY, int dir)
 {
     int dX = dirsX[dir], dY = dirsY[dir];
 
@@ -109,7 +109,7 @@ int onNeighbour(Grid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLength, 
     return 0;
 }
 
-int pathfind(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[])
+int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[])
 {
     // no idea if this makes it faster, but it dynamically alters
     // the max open length to match program width and height... maybe idk

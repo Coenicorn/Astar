@@ -16,6 +16,6 @@
  * @returns Integer for program success: 1 for error, 0 for no errors
  * @note You can define a path with Cell *path[MAX_PATH_LENGTH] (name doesn't have to be path) and just pass it to the function like (getPath(... , path)
  * */
-int pathfind(Grid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[MAX_PATH_LENGTH]);
+int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[MAX_PATH_LENGTH]);
 
 #endif
