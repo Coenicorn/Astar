@@ -48,7 +48,7 @@ double heuristic(int dX, int dY)
     // return dX + dY;
 }
 
-void squeezeOpen(Cell *openIn[MAX_OPEN_LENGTH], int *len)
+void squeezeOpen(AstarCell *openIn[MAX_OPEN_LENGTH], int *len)
 {
     *len += 8;
 
@@ -71,7 +71,7 @@ void squeezeOpen(Cell *openIn[MAX_OPEN_LENGTH], int *len)
     *len = j;
 }
 
-int onNeighbour(AstarGrid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLength, int goalX, int goalY, int dir)
+int onNeighbour(AstarGrid *g, AstarCell *p, AstarCell *open[MAX_OPEN_LENGTH], int *openLength, int goalX, int goalY, int dir)
 {
     int dX = dirsX[dir], dY = dirsY[dir];
 
@@ -81,7 +81,7 @@ int onNeighbour(AstarGrid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLen
     if (!isValidPosition(g, x, y) || g->data[y][x].value == V_CLOSED)
         return 0;
 
-    Cell *n = &g->data[y][x];
+    AstarCell *n = &g->data[y][x];
 
     // get new G value
     int isDiagonal = (dX == 0 || dY == 0);
@@ -109,7 +109,7 @@ int onNeighbour(AstarGrid *g, Cell *p, Cell *open[MAX_OPEN_LENGTH], int *openLen
     return 0;
 }
 
-int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[])
+int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCell *path_out[])
 {
     // no idea if this makes it faster, but it dynamically alters
     // the max open length to match program width and height... maybe idk
@@ -128,13 +128,13 @@ int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, Cell *p
     }
 
     // set start cell to open
-    Cell *s = &g->data[startY][startY];
+    AstarCell *s = &g->data[startY][startY];
     s->value = V_OPEN;
     s->F = heuristic(abs(startX - goalX), abs(startX - goalX));
     s->G = 0;
 
     // initialize open array
-    Cell *open[MAX_OPEN_LENGTH];
+    AstarCell *open[MAX_OPEN_LENGTH];
 
     for (int i = 0; i < MAX_OPEN_LENGTH; i++)
         open[i] = NULL;
@@ -146,7 +146,7 @@ int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, Cell *p
 
     int pathFound = 0;
 
-    Cell *current = open[0];
+    AstarCell *current = open[0];
 
     // main pathfinding loop
     while (!pathFound)
@@ -160,7 +160,7 @@ int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, Cell *p
         // loop over all cells in open array
         for (int i = 0; i < openLength; i++)
         {
-            Cell *c = open[i];
+            AstarCell *c = open[i];
 
             // record best scoring cell
             if (c->value == V_OPEN && c->F < lowestF)

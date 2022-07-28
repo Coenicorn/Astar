@@ -14,7 +14,7 @@
 typedef struct AstarGrid
 {
     // two dimensional grid of cells
-    struct Cell **data;
+    struct AstarCell **data;
     int w, h;
     int len;
 } AstarGrid;

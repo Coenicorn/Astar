@@ -42,10 +42,10 @@ AstarGrid *newAstarGrid(int w, int h)
     AstarGrid *out = malloc(sizeof(AstarGrid));
 
     // initialize two dimensional grid
-    out->data = malloc(sizeof(Cell *) * h);
+    out->data = malloc(sizeof(AstarCell *) * h);
     for (int y = 0; y < h; y++)
     {
-        out->data[y] = malloc(sizeof(Cell) * w);
+        out->data[y] = malloc(sizeof(AstarCell) * w);
     }
 
     out->w = w;
@@ -63,7 +63,7 @@ AstarGrid *newAstarGrid(int w, int h)
 
             int value = V_DEFAULT;
 
-            out->data[y][x] = (Cell){x, y, value, 0.0, 0.0, NULL};
+            out->data[y][x] = (AstarCell){x, y, value, 0.0, 0.0, NULL};
         }
     }
 
