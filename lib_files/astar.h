@@ -8,19 +8,20 @@
 #define V_PATH 4
 
 #define MAX_PATH_LENGTH 1000
-typedef struct Cell
+typedef struct AstarCell
 {
     int x, y;
     // 0 for nothing, 1 for open, 2 for closed, 3 for non-traversable
     int value;
     double G, F;
-    struct Cell *parent;
-} Cell;
+    struct AstarCell *parent;
+} AstarCell;
 
+/* Pathfinding grid, holds grid data in twodimensional array where rows come before columns (...->data[y][x] as opposed to ...->data[x][y]) */
 typedef struct AstarGrid
 {
     // two dimensional grid of cells
-    struct Cell **data;
+    struct AstarCell **data;
     int w, h;
     int len;
 } AstarGrid;
@@ -68,6 +69,6 @@ int isValidPosition(AstarGrid *g, int x, int y);
  * @param path_out A predefined path variable of length MAX_PATH_LENGTH, pass NULL if you don't want an output path
  * @returns Integer for program success: 1 for error, 0 for no errors
  * */
-int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, Cell *path_out[MAX_PATH_LENGTH]);
+int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCell *path_out[MAX_PATH_LENGTH]);
 
 #endif
