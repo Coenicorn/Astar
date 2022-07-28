@@ -7,7 +7,7 @@ LIBDIR := ./lib
 
 CFLAGS := -Wall -g -I$(SRCDIR)/ -I$(LIBDIR)/
 LFLAGS := -L$(SRCDIR)/ -L$(BINDIR)/
-LDFLAGS := -lastar -ldl -lm
+LDFLAGS := -lastar -lraylib -lpthread -lGL -ldl -lm
 
 SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(SRCS:.c=.o)

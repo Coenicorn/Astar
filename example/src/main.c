@@ -2,27 +2,64 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+#include <raylib.h>
+
+#define W_WIDTH 500
+#define W_HEIGHT 500
 
 int main()
 {
-	// variable declerations are optional, you can just pass in the raw values, it's just cool af
-	const int w = 10, h = 10, num_obst = 1;
+	srand((int)clock());
 
-	// **IMPORTANT**
-	srand(time(NULL));
+	InitWindow(W_WIDTH, W_HEIGHT, "A* in C");
+	SetTargetFPS(60);
 
-	Grid *g = getRandomGrid(w, h, num_obst);
-
-	// completely optional
+	Grid *g = getRandomGrid(50, 50, 50);
 	printGrid(g);
 
-	int fail = pathfind(g, 0, 0, w-1, h-1, NULL);
+	while (!WindowShouldClose())
+	{
+		if (IsKeyPressed(KEY_ENTER))
+		{
+			pathfind(g, 0, 0, 49, 49, NULL);
+			printGrid(g);
+		}
 
-	// completely optional
-	if (!fail)
-		printGrid(g);
-	
-	// **VERY IMPORTANT** Always free the grid
+		if (IsKeyPressed(KEY_R))
+		{
+			g = getRandomGrid(50, 50, 50);
+			printGrid(g);
+		}
+
+		BeginDrawing();
+		ClearBackground(WHITE);
+
+		for (int y = 0; y < g->h; y++)
+		{
+			for (int x = 0; x < g->w; x++)
+			{
+				int v = g->data[y][x].value;
+
+				Color c = WHITE;
+
+				if (v == 1)
+					c = BLUE;
+				if (v == 2)
+					c = RED;
+				if (v == 4)
+					c = GREEN;
+				if (v == 3)
+					c = BLACK;
+			
+				DrawRectangle(x * 10, y * 10, 10, 10, c);
+			}
+		}
+
+		EndDrawing();
+	}
+
+	CloseWindow();
+
 	freeGrid(g);
 
 	return 0;
