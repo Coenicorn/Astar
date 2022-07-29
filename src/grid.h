@@ -45,12 +45,4 @@ void freeGrid(AstarGrid *g);
  * */
 void printGrid(AstarGrid *g);
 
-/** Check if the given position lies within the boundaries of a given grid
- * @param g AstarGrid to check
- * @param x Position x
- * @param y Position y
- * @returns Boolean with value 1 for valid, 0 for not valid
- * */
-int isValidPosition(AstarGrid *g, int x, int y);
-
 #endif

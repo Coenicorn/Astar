@@ -24,7 +24,6 @@ open array has a fixed size. Still, a pretty cool algorithm if you'd ask me!
 
 */
 
-
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -42,13 +41,18 @@ const int dirsY[8] = {0, -1, 0, 1, -1, 1, -1, 1};
 
 int MAX_OPEN_LENGTH;
 
-double heuristic(int dX, int dY)
+static int isValidPosition(AstarGrid *g, int x, int y)
+{
+    return (x >= 0 && x < g->w && y >= 0 && y < g->h);
+}
+
+static double heuristic(int dX, int dY)
 {
     return sqrt(dX * dX + dY * dY);
     // return dX + dY;
 }
 
-void squeezeOpen(AstarCell *openIn[MAX_OPEN_LENGTH], int *len)
+static void squeezeOpen(AstarCell *openIn[MAX_OPEN_LENGTH], int *len)
 {
     *len += 8;
 
@@ -71,7 +75,7 @@ void squeezeOpen(AstarCell *openIn[MAX_OPEN_LENGTH], int *len)
     *len = j;
 }
 
-int onNeighbour(AstarGrid *g, AstarCell *p, AstarCell *open[MAX_OPEN_LENGTH], int *openLength, int goalX, int goalY, int dir)
+static int onNeighbour(AstarGrid *g, AstarCell *p, AstarCell *open[MAX_OPEN_LENGTH], int *openLength, int goalX, int goalY, int dir)
 {
     int dX = dirsX[dir], dY = dirsY[dir];
 
@@ -134,7 +138,7 @@ int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCe
     }
 
     // set start cell to open
-    AstarCell *s = &g->data[startY][startY];
+    AstarCell *s = &g->data[startY][startX];
     s->value = V_OPEN;
     s->F = heuristic(abs(startX - goalX), abs(startX - goalX));
     s->G = 0;
@@ -224,8 +228,16 @@ int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCe
             break;
 
         i++;
+
         current = current->parent;
     }
+    // reverse
+    for (int n = 0, m = i; n < m; n++, m--)
+    {
+        AstarCell *t = path_out[n];
+        path_out[n] = path_out[m];
+        path_out[m] = t;
+    }
 
-    return i;
+    return i + 1;
 }

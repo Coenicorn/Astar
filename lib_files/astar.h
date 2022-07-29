@@ -1,12 +1,6 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
-#define V_DEFAULT 0
-#define V_OPEN 1
-#define V_CLOSED 2
-#define V_BLOCKED 3
-#define V_PATH 4
-
 #define MAX_PATH_LENGTH 1000
 typedef struct AstarCell
 {
@@ -51,14 +45,6 @@ void freeGrid(AstarGrid *g);
  * @note Watch out with grids that are bigger than console width or height, this function doesn't account for that and will thus wrap around
  * */
 void printGrid(AstarGrid *g);
-
-/** Check if the given position lies within the boundaries of a given grid
- * @param g AstarGrid to check
- * @param x Position x
- * @param y Position y
- * @returns Boolean with value 1 for valid, 0 for not valid
- * */
-int isValidPosition(AstarGrid *g, int x, int y);
 
 /** Get a generated path from input variables
  * @param g The grid to do the pathfinding in; THIS GRID GETS MODIFIED

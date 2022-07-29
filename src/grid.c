@@ -8,18 +8,18 @@
 // any V_OPEN cell will be shown as +, etc.)
 const char output_values[5] = {' ', '+', '-', '/', '@'};
 
-int isValidPosition(AstarGrid *g, int x, int y)
+static int isValidPosition(AstarGrid *g, int x, int y)
 {
     return (x >= 0 && x < g->w && y >= 0 && y < g->h);
 }
 
-void blockPos(AstarGrid *g, int x, int y)
+static void blockPos(AstarGrid *g, int x, int y)
 {
     if (isValidPosition(g, x, y))
         g->data[y][x].value = V_BLOCKED;
 }
 
-void dotGrid(AstarGrid *g, int x, int y)
+static void dotGrid(AstarGrid *g, int x, int y)
 {
     // Hardcoding go brrrrrrrrr
     blockPos(g, x, y);
