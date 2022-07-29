@@ -43,8 +43,8 @@ int MAX_OPEN_LENGTH;
 
 static double ASTAR_Heuristic(int dX, int dY)
 {
-    return sqrt(dX * dX + dY * dY);
-    // return dX + dY;
+    // return sqrt(dX * dX + dY * dY);
+    return dX + dY;
 }
 
 static void ASTAR_SqueezeOpen(ASTAR_Cell *openIn[MAX_OPEN_LENGTH], int *len)
