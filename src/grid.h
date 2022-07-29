@@ -9,40 +9,40 @@
 #define V_BLOCKED 3
 #define V_PATH 4
 
-#define WALKABLE_CHANCE .2
-
-typedef struct AstarGrid
+typedef struct ASTAR_Grid
 {
     // two dimensional grid of cells
-    struct AstarCell **data;
+    struct ASTAR_Cell **data;
     int w, h;
     int len;
-} AstarGrid;
+} ASTAR_Grid;
 
 /** Helper function to get a grid with cells with value V_DEFAULT
  * @param w The width of the grid in cells
  * @param h The height of the grid in cells
  * @returns A grid with cells with value V_DEFAULT
  * */
-AstarGrid *newAstarGrid(int w, int h);
-
-/** Get a grid of cells with randomized obstacles
- * @param w The width of the grid in cells
- * @param h The height of the grid in cells
- * @param numObstacles The number of obstacles the grid should have
- * @returns A grid filled with cells (see cell.h)
- * */
-AstarGrid *newRandomAstarGrid(int w, int h, int numObstacles);
+ASTAR_Grid *ASTAR_NewGrid(int w, int h);
 
 /** Frees any given grid from memory
  * @param g The grid to free
  * */
-void freeGrid(AstarGrid *g);
+void ASTAR_FreeGrid(ASTAR_Grid *g);
+
+/**
+ * @brief Checks if position (x, y) is inside the bounds of given grid
+ * 
+ * @param g The grid to check
+ * @param x The points' x
+ * @param y The points' y
+ * @return 1 for valid pos, 0 for not
+ */
+int ASTAR_IsValidPosition(ASTAR_Grid *g, int x, int y);
 
 /** Prints a grid to the console
  * @param g The grid to free to console
  * @note Watch out with grids that are bigger than console width or height, this function doesn't account for that and will thus wrap around
  * */
-void printGrid(AstarGrid *g);
+void ASTAR_PrintGrid(ASTAR_Grid *g);
 
 #endif

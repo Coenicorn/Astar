@@ -26,9 +26,9 @@ typedef struct Player
     int pathlength, currentgoal;
 } Player;
 
-AstarGrid *getPathGrid(Cell **grid)
+ASTAR_Grid *getPathGrid(Cell **grid)
 {
-    AstarGrid *out = newAstarGrid(G_WIDTH, G_HEIGHT);
+    ASTAR_Grid *out = newAstarGrid(G_WIDTH, G_HEIGHT);
 
     for (int y = 0; y < G_HEIGHT; y++)
     {
@@ -54,9 +54,9 @@ void getNewPath(Player *p, Cell **grid)
     if (y < 0)
         y = 0;
 
-    AstarGrid *pg = getPathGrid(grid);
+    ASTAR_Grid *pg = getPathGrid(grid);
 
-    AstarCell *path[MAX_PATH_LENGTH];
+    ASTAR_Cell *path[MAX_PATH_LENGTH];
 
     p->pathlength = pathfind(pg, (int)(p->pos.x), (int)(p->pos.y), x, y, path);
 
@@ -176,6 +176,7 @@ int main()
         }
 
         DrawRectangle(player.pos.x * RES-5, player.pos.y * RES-5, 10, 10, RED);
+        DrawText("Leftclick to path, rightclick to build obstacle, R to reset");
 
         EndDrawing();
     }

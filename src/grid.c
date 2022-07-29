@@ -8,44 +8,20 @@
 // any V_OPEN cell will be shown as +, etc.)
 const char output_values[5] = {' ', '+', '-', '/', '@'};
 
-static int isValidPosition(AstarGrid *g, int x, int y)
+int ASTAR_IsValidPosition(ASTAR_Grid *g, int x, int y)
 {
     return (x >= 0 && x < g->w && y >= 0 && y < g->h);
 }
 
-static void blockPos(AstarGrid *g, int x, int y)
+ASTAR_Grid *ASTAR_NewGrid(int w, int h)
 {
-    if (isValidPosition(g, x, y))
-        g->data[y][x].value = V_BLOCKED;
-}
-
-static void dotGrid(AstarGrid *g, int x, int y)
-{
-    // Hardcoding go brrrrrrrrr
-    blockPos(g, x, y);
-    blockPos(g, x + 1, y);
-    blockPos(g, x - 1, y);
-    blockPos(g, x, y + 1);
-    blockPos(g, x, y - 1);
-    blockPos(g, x - 1, y - 1);
-    blockPos(g, x + 1, y + 1);
-    blockPos(g, x - 1, y + 1);
-    blockPos(g, x + 1, y - 1);
-    blockPos(g, x + 2, y);
-    blockPos(g, x - 2, y);
-    blockPos(g, x, y + 2);
-    blockPos(g, x, y - 2);
-}
-
-AstarGrid *newAstarGrid(int w, int h)
-{
-    AstarGrid *out = malloc(sizeof(AstarGrid));
+    ASTAR_Grid *out = malloc(sizeof(ASTAR_Grid));
 
     // initialize two dimensional grid
-    out->data = malloc(sizeof(AstarCell *) * h);
+    out->data = malloc(sizeof(ASTAR_Cell *) * h);
     for (int y = 0; y < h; y++)
     {
-        out->data[y] = malloc(sizeof(AstarCell) * w);
+        out->data[y] = malloc(sizeof(ASTAR_Cell) * w);
     }
 
     out->w = w;
@@ -63,34 +39,14 @@ AstarGrid *newAstarGrid(int w, int h)
 
             int value = V_DEFAULT;
 
-            out->data[y][x] = (AstarCell){x, y, value, 0.0, 0.0, NULL};
+            out->data[y][x] = (ASTAR_Cell){x, y, value, 0.0, 0.0, NULL};
         }
     }
 
     return out;
 }
 
-AstarGrid *newRandomAstarGrid(int w, int h, int numObstacles)
-{
-    AstarGrid *out = newAstarGrid(w, h);
-
-    // if ya don't want no dots, we aint givin' ya no dots!
-    if (!numObstacles)
-        return out;
-
-    for (int i = 0; i < numObstacles; i++)
-    {
-        // random position on grid
-        int x = (int)(((float)rand() / (float)RAND_MAX) * w);
-        int y = (int)(((float)rand() / (float)RAND_MAX) * h);
-
-        dotGrid(out, x, y);
-    }
-
-    return out;
-}
-
-void freeGrid(AstarGrid *g)
+void ASTAR_FreeGrid(ASTAR_Grid *g)
 {
     for (int i = 0, l = g->h; i < l; i++)
     {
@@ -100,7 +56,7 @@ void freeGrid(AstarGrid *g)
     free(g);
 }
 
-void printGrid(AstarGrid *g)
+void ASTAR_PrintGrid(ASTAR_Grid *g)
 {
     for (int y = 0; y < g->h; y++)
     {

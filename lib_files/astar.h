@@ -2,59 +2,62 @@
 #define ASTAR_H
 
 #define MAX_PATH_LENGTH 1000
-typedef struct AstarCell
+
+typedef struct ASTAR_Cell
 {
     int x, y;
     // 0 for nothing, 1 for open, 2 for closed, 3 for non-traversable
     int value;
     double G, F;
-    struct AstarCell *parent;
-} AstarCell;
+    struct ASTAR_Cell *parent;
+} ASTAR_Cell;
 
-/* Pathfinding grid, holds grid data in twodimensional array where rows come before columns (...->data[y][x] as opposed to ...->data[x][y]) */
-typedef struct AstarGrid
+typedef struct ASTAR_Grid
 {
     // two dimensional grid of cells
-    struct AstarCell **data;
+    struct ASTAR_Cell **data;
     int w, h;
     int len;
-} AstarGrid;
+} ASTAR_Grid;
 
 /** Helper function to get a grid with cells with value V_DEFAULT
  * @param w The width of the grid in cells
  * @param h The height of the grid in cells
  * @returns A grid with cells with value V_DEFAULT
  * */
-AstarGrid *newAstarGrid(int w, int h);
-
-/** Get a grid of cells with randomized obstacles
- * @param w The width of the grid in cells
- * @param h The height of the grid in cells
- * @param numObstacles The number of obstacles the grid should have
- * @returns A grid filled with cells (see cell.h)
- * */
-AstarGrid *newRandomAstarGrid(int w, int h, int numObstacles);
+ASTAR_Grid *ASTAR_NewGrid(int w, int h);
 
 /** Frees any given grid from memory
  * @param g The grid to free
  * */
-void freeGrid(AstarGrid *g);
+void ASTAR_FreeGrid(ASTAR_Grid *g);
+
+/**
+ * @brief Checks if position (x, y) is inside the bounds of given grid
+ * 
+ * @param g The grid to check
+ * @param x The points' x
+ * @param y The points' y
+ * @return 1 for valid pos, 0 for not
+ */
+int ASTAR_IsValidPosition(ASTAR_Grid *g, int x, int y);
 
 /** Prints a grid to the console
  * @param g The grid to free to console
  * @note Watch out with grids that are bigger than console width or height, this function doesn't account for that and will thus wrap around
  * */
-void printGrid(AstarGrid *g);
+void ASTAR_PrintGrid(ASTAR_Grid *g);
 
 /** Get a generated path from input variables
- * @param g The grid to do the pathfinding in; THIS GRID GETS MODIFIED
+ * @param g The grid to do the pathfinding in
  * @param startX The start position x
  * @param startY The start position y
  * @param goalX The goal position x
  * @param goalY The goal position y
  * @param path_out A predefined path variable of length MAX_PATH_LENGTH, pass NULL if you don't want an output path
- * @returns Length of path; 0 for error
+ * @returns Integer for program success: 1 for error, 0 for no errors
+ * @note You can define a path with AstarCell *path[MAX_PATH_LENGTH] (name doesn't have to be path) and just pass it to the function like (getPath(... , path)
  * */
-int pathfind(AstarGrid *g, int startX, int startY, int goalX, int goalY, AstarCell *path_out[MAX_PATH_LENGTH]);
+int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, ASTAR_Cell *path_out[MAX_PATH_LENGTH]);
 
 #endif
