@@ -176,7 +176,7 @@ int main()
         }
 
         DrawRectangle(player.pos.x * RES-5, player.pos.y * RES-5, 10, 10, RED);
-        DrawText("Leftclick to path, rightclick to build obstacle, R to reset");
+        DrawText("Leftclick to path, rightclick to build obstacle, R to reset", 0, 0, 20, PURPLE);
 
         EndDrawing();
     }
