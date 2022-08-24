@@ -3,11 +3,11 @@
 
 #include "cell.h"
 
-#define V_DEFAULT 0
-#define V_OPEN 1
-#define V_CLOSED 2
-#define V_BLOCKED 3
-#define V_PATH 4
+#define ASTAR_V_DEFAULT 0
+#define ASTAR_V_OPEN 1
+#define ASTAR_V_CLOSED 2
+#define ASTAR_V_BLOCKED 3
+#define ASTAR_V_PATH 4
 
 typedef struct ASTAR_Grid
 {
@@ -17,10 +17,10 @@ typedef struct ASTAR_Grid
     int len;
 } ASTAR_Grid;
 
-/** Helper function to get a grid with cells with value V_DEFAULT
+/** Helper function to get a grid with cells with value ASTAR_V_DEFAULT
  * @param w The width of the grid in cells
  * @param h The height of the grid in cells
- * @returns A grid with cells with value V_DEFAULT
+ * @returns A grid with cells with value ASTAR_V_DEFAULT
  * */
 ASTAR_Grid *ASTAR_NewGrid(int w, int h);
 

@@ -1,25 +1,23 @@
 EXEC := ./build/main.out
 
 SRCDIR := ./src
-
 BINDIR := ./bin
 LIBDIR := ./lib
+OBJDIR := ./obj
 
-CFLAGS := -Wall -g -I$(SRCDIR)/ -I$(LIBDIR)/
+CFLAGS := -Wall -Wextra -g -I$(SRCDIR)/ -I$(LIBDIR)/
 LFLAGS := -L$(SRCDIR)/ -L$(BINDIR)/
-LDFLAGS := -lm
+LDFLAGS := 
 
-SRCS := $(wildcard $(SRCDIR)/*.c)
-OBJS := $(SRCS:.c=.o)
+OBJS := $(wildcard $(SRCDIR)/*.c)
+OBJS := $(OBJS:.c=.o)
+OBJS := $(subst $(SRCDIR)/,$(OBJDIR)/,$(OBJS))
 
-RM := rm -rf
+MKDIR := mkdir -p
 
-%.o: %.c
-	$(CC) $< $(CFLAGS) -c -o $@
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) -c $< $(CFLAGS) -o $@
 
-build: $(OBJS)
+$(EXEC): $(OBJS)
+	$(MKDIR) $(@D)
 	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $(EXEC) $(LDFLAGS)
-	# $(MAKE) clean
-
-clean:
-	sudo $(RM) $(SRCDIR)/*.o

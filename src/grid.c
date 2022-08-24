@@ -4,8 +4,8 @@
 #include "cell.h"
 #include "grid.h"
 
-// for visualization, corresponds to the V_* values (any V_DEFAULT cell will be shown as a space, 
-// any V_OPEN cell will be shown as +, etc.)
+// for visualization, corresponds to the V_* values (any ASTAR_V_DEFAULT cell will be shown as a space, 
+// any ASTAR_V_OPEN cell will be shown as +, etc.)
 const char output_values[5] = {' ', '+', '-', '/', '@'};
 
 int ASTAR_IsValidPosition(ASTAR_Grid *g, int x, int y)
@@ -35,9 +35,9 @@ ASTAR_Grid *ASTAR_NewGrid(int w, int h)
             // is the tile traversable?
 
             // for completely randomized grid
-            // int value = (((float)rand() / (float)RAND_MAX) < WALKABLE_CHANCE) * V_BLOCKED;
+            // int value = (((float)rand() / (float)RAND_MAX) < WALKABLE_CHANCE) * ASTAR_V_BLOCKED;
 
-            int value = V_DEFAULT;
+            int value = ASTAR_V_DEFAULT;
 
             out->data[y][x] = (ASTAR_Cell){x, y, value, 0.0, 0.0, NULL};
         }

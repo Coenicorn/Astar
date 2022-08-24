@@ -11,17 +11,6 @@ and for me to feel slightly good about my programming skills (which is very illj
 
 If you're actually reading this, enjoy! (What are you doing tho?)
 
-As for other programmers reading this:
-
-The maximum time complexity of this program is still the same as that of floodfill,
-because in the worst case scenario you'll still have to traverse all the cells in the grid.
-The best case scenario is quite a bit better though, as the ASTAR_Heuristic kind of "guides" the pathfinding
-towards the target as opposed to just filling everything and randomly stumbling across the
-path like floodfill does.
-
-The space complexity is pretty bad, as all the cells in the grid are stored in memory and the
-open array has a fixed size. Still, a pretty cool algorithm if you'd ask me!
-
 */
 
 #include <math.h>
@@ -60,7 +49,7 @@ static void ASTAR_SqueezeOpen(ASTAR_Cell *openIn[MAX_OPEN_LENGTH], int *len)
         // check for existing cell and if it is open
         if (openIn[i] != NULL)
         {
-            if (openIn[i]->value == V_OPEN)
+            if (openIn[i]->value == ASTAR_V_OPEN)
                 openIn[j++] = openIn[i];
             else
                 openIn[i] = NULL;
@@ -76,25 +65,30 @@ int ASTAR_OnNeighbour(ASTAR_Grid *g, ASTAR_Cell *p, ASTAR_Cell *open[MAX_OPEN_LE
 
     int x = p->x + dX, y = p->y + dY;
 
+    int notDiagonal = (dX == 0 || dY == 0);
+
     // check if neighbour position is inside grid
-    if (!ASTAR_IsValidPosition(g, x, y) || g->data[y][x].value == V_CLOSED)
+    if (!ASTAR_IsValidPosition(g, x, y) || g->data[y][x].value == ASTAR_V_CLOSED)
+        return 0;
+    
+    int willPhase = (!notDiagonal && g->data[p->y][dX].value == ASTAR_V_BLOCKED && g->data[dY][p->x].value == ASTAR_V_BLOCKED);
+
+    if (willPhase)
         return 0;
 
     ASTAR_Cell *n = &g->data[y][x];
 
     // get new G value
-    int isDiagonal = (dX == 0 || dY == 0);
+    double nG = p->G + (notDiagonal ? 1 : SQRT2);
 
-    double nG = p->G + (isDiagonal ? 1 : SQRT2);
-
-    if (n->value == V_DEFAULT || nG < n->G)
+    if (n->value == ASTAR_V_DEFAULT || nG < n->G)
     {
         n->parent = p;
         n->G = nG;
 
         n->F = n->G + ASTAR_Heuristic(abs(x - goalX), abs(y - goalY)) * WEIGHT;
 
-        n->value = V_OPEN;
+        n->value = ASTAR_V_OPEN;
 
         *openLength += 1;
 
@@ -108,7 +102,7 @@ int ASTAR_OnNeighbour(ASTAR_Grid *g, ASTAR_Cell *p, ASTAR_Cell *open[MAX_OPEN_LE
     return 0;
 }
 
-int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, ASTAR_Cell *path_out[])
+int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, ASTAR_Cell **path_out)
 {
     if (path_out == NULL)
     {
@@ -134,7 +128,7 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
 
     // set start cell to open
     ASTAR_Cell *s = &g->data[startY][startX];
-    s->value = V_OPEN;
+    s->value = ASTAR_V_OPEN;
     s->F = ASTAR_Heuristic(abs(startX - goalX), abs(startX - goalX));
     s->G = 0;
 
@@ -168,7 +162,7 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
             ASTAR_Cell *c = open[i];
 
             // record best scoring cell
-            if (c->value == V_OPEN && c->F < lowestF)
+            if (c->value == ASTAR_V_OPEN && c->F < lowestF)
             {
                 lowestF = c->F;
                 current = c;
@@ -186,7 +180,7 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
         if (lowestF == INFINITY)
             break;
 
-        current->value = V_CLOSED;
+        current->value = ASTAR_V_CLOSED;
 
         // open all neighbours of the current cell
         for (int i = 0; i < 8; i++)
@@ -210,12 +204,12 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
     int i = 0;
     while (1)
     {
-        current->value = V_PATH;
+        current->value = ASTAR_V_PATH;
         path_out[i] = current;
 
-        if (i >= MAX_PATH_LENGTH)
+        if (i >= ASTAR_MAX_PATH_LENGTH)
         {
-            printf("**Path longer than MAX_PATH_LENGTH**\n");
+            printf("**Path longer than ASTAR_MAX_PATH_LENGTH**\n");
             return 0;
         }
 
