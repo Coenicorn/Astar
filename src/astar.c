@@ -18,8 +18,6 @@ If you're actually reading this, enjoy! (What are you doing tho?)
 #include <stdio.h>
 
 #include "astar.h"
-#include "grid.h"
-#include "cell.h"
 
 #define WEIGHT 1
 
@@ -140,7 +138,7 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
 
     open[0] = s;
 
-    // initialize length of open array, the first item in the array is already open; hence the value 1
+    // initialize length of open array, the first item in the array is already open, hence the value 1
     int openLength = 1;
 
     int pathFound = 0;

@@ -1,12 +1,14 @@
+CC := gcc
+
 EXEC := ./build/main.out
 
 SRCDIR := ./src
-BINDIR := ./bin
 LIBDIR := ./lib
+INCLUDEDIR := ./include
 OBJDIR := ./obj
 
-CFLAGS := -Wall -Wextra -g -I$(SRCDIR)/ -I$(LIBDIR)/
-LFLAGS := -L$(SRCDIR)/ -L$(BINDIR)/
+CFLAGS := -Wall -Wextra -g -I$(SRCDIR)/ -I$(INCLUDEDIR)/
+LFLAGS := -L$(SRCDIR)/ -L$(LIBDIR)/
 LDFLAGS := 
 
 OBJS := $(wildcard $(SRCDIR)/*.c)
@@ -18,6 +20,8 @@ MKDIR := mkdir -p
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $< $(CFLAGS) -o $@
 
-$(EXEC): $(OBJS)
-	$(MKDIR) $(@D)
-	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $(EXEC) $(LDFLAGS)
+all: $(OBJS)
+
+clean:
+	rm -rf $(OBJS)
+	rm -rf EXEC

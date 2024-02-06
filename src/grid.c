@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "cell.h"
-#include "grid.h"
+#include "astar.h"
 
 // for visualization, corresponds to the V_* values (any ASTAR_V_DEFAULT cell will be shown as a space, 
 // any ASTAR_V_OPEN cell will be shown as +, etc.)
