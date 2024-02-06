@@ -1,13 +1,20 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
-#define MAX_PATH_LENGTH 1000
+typedef enum ASTAR_Value
+{
+    ASTAR_V_DEFAULT = 0,
+    ASTAR_V_OPEN,
+    ASTAR_V_CLOSED,
+    ASTAR_V_BLOCKED,
+    ASTAR_V_PATH
+} ASTAR_Value;
 
 typedef struct ASTAR_Cell
 {
     int x, y;
     // 0 for nothing, 1 for open, 2 for closed, 3 for non-traversable
-    int value;
+    ASTAR_Value value;
     double G, F;
     struct ASTAR_Cell *parent;
 } ASTAR_Cell;
@@ -20,12 +27,12 @@ typedef struct ASTAR_Grid
     int len;
 } ASTAR_Grid;
 
-/** Helper function to get a grid with cells with value V_DEFAULT
+/** Helper function to get a grid with cells with value ASTAR_V_DEFAULT
  * @param w The width of the grid in cells
  * @param h The height of the grid in cells
- * @returns A grid with cells with value V_DEFAULT
+ * @returns A grid with cells with value ASTAR_V_DEFAULT
  * */
-ASTAR_Grid *ASTAR_NewGrid(int w, int h);
+void ASTAR_InitGrid(ASTAR_Grid *g, int w, int h);
 
 /** Frees any given grid from memory
  * @param g The grid to free
@@ -48,16 +55,18 @@ int ASTAR_IsValidPosition(ASTAR_Grid *g, int x, int y);
  * */
 void ASTAR_PrintGrid(ASTAR_Grid *g);
 
+#define ASTAR_MAX_PATH_LENGTH 1000
+
 /** Get a generated path from input variables
  * @param g The grid to do the pathfinding in
  * @param startX The start position x
  * @param startY The start position y
  * @param goalX The goal position x
  * @param goalY The goal position y
- * @param path_out A predefined path variable of length MAX_PATH_LENGTH, pass NULL if you don't want an output path
+ * @param path_out A predefined path variable of length ASTAR_MAX_PATH_LENGTH, pass NULL if you don't want an output path
  * @returns Integer for program success: 1 for error, 0 for no errors
- * @note You can define a path with AstarCell *path[MAX_PATH_LENGTH] (name doesn't have to be path) and just pass it to the function like (getPath(... , path)
+ * @note You can define a path with AstarCell *path[ASTAR_MAX_PATH_LENGTH] (name doesn't have to be path) and just pass it to the function like (getPath(... , path)
  * */
-int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, ASTAR_Cell *path_out[MAX_PATH_LENGTH]);
+int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, ASTAR_Cell *path_out[], int *pathlength);
 
 #endif

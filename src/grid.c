@@ -12,19 +12,17 @@ int ASTAR_IsValidPosition(ASTAR_Grid *g, int x, int y)
     return (x >= 0 && x < g->w && y >= 0 && y < g->h);
 }
 
-ASTAR_Grid *ASTAR_NewGrid(int w, int h)
+void ASTAR_InitGrid(ASTAR_Grid *g, int w, int h)
 {
-    ASTAR_Grid *out = malloc(sizeof(ASTAR_Grid));
-
     // initialize two dimensional grid
-    out->data = malloc(sizeof(ASTAR_Cell *) * h);
+    g->data = malloc(sizeof(ASTAR_Cell *) * h);
     for (int y = 0; y < h; y++)
     {
-        out->data[y] = malloc(sizeof(ASTAR_Cell) * w);
+        g->data[y] = malloc(sizeof(ASTAR_Cell) * w);
     }
 
-    out->w = w;
-    out->h = h;
+    g->w = w;
+    g->h = h;
 
     // fill grid with default nodes
     for (int y = 0; y < h; y++)
@@ -38,11 +36,9 @@ ASTAR_Grid *ASTAR_NewGrid(int w, int h)
 
             int value = ASTAR_V_DEFAULT;
 
-            out->data[y][x] = (ASTAR_Cell){x, y, value, 0.0, 0.0, NULL};
+            g->data[y][x] = (ASTAR_Cell){x, y, value, 0.0, 0.0, NULL};
         }
     }
-
-    return out;
 }
 
 void ASTAR_FreeGrid(ASTAR_Grid *g)
@@ -52,7 +48,6 @@ void ASTAR_FreeGrid(ASTAR_Grid *g)
         free(g->data[i]);
     }
     free(g->data);
-    free(g);
 }
 
 void ASTAR_PrintGrid(ASTAR_Grid *g)

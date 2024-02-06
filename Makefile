@@ -9,7 +9,7 @@ OBJDIR := ./obj
 
 CFLAGS := -Wall -Wextra -g -I$(SRCDIR)/ -I$(INCLUDEDIR)/
 LFLAGS := -L$(SRCDIR)/ -L$(LIBDIR)/
-LDFLAGS := 
+LDFLAGS := -lastar
 
 OBJS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(OBJS:.c=.o)
@@ -21,6 +21,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $< $(CFLAGS) -o $@
 
 all: $(OBJS)
+	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $(EXEC) $(LDFLAGS)
 
 clean:
 	rm -rf $(OBJS)

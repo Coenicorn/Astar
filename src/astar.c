@@ -63,13 +63,13 @@ int ASTAR_OnNeighbour(ASTAR_Grid *g, ASTAR_Cell *p, ASTAR_Cell *open[MAX_OPEN_LE
 
     int x = p->x + dX, y = p->y + dY;
 
-    int notDiagonal = (dX == 0 || dY == 0);
+    int diagonal = !(dX == 0 || dY == 0);
 
     // check if neighbour position is inside grid
     if (!ASTAR_IsValidPosition(g, x, y) || g->data[y][x].value == ASTAR_V_CLOSED)
         return 0;
     
-    int willPhase = (!notDiagonal && g->data[p->y][dX].value == ASTAR_V_BLOCKED && g->data[dY][p->x].value == ASTAR_V_BLOCKED);
+    int willPhase = (diagonal && g->data[p->y][p->x + dX].value == ASTAR_V_BLOCKED && g->data[p->y + dY][p->x].value == ASTAR_V_BLOCKED);
 
     if (willPhase)
         return 0;
@@ -77,7 +77,7 @@ int ASTAR_OnNeighbour(ASTAR_Grid *g, ASTAR_Cell *p, ASTAR_Cell *open[MAX_OPEN_LE
     ASTAR_Cell *n = &g->data[y][x];
 
     // get new G value
-    double nG = p->G + (notDiagonal ? 1 : SQRT2);
+    double nG = p->G + (diagonal ? SQRT2 : 1);
 
     if (n->value == ASTAR_V_DEFAULT || nG < n->G)
     {
@@ -100,12 +100,12 @@ int ASTAR_OnNeighbour(ASTAR_Grid *g, ASTAR_Cell *p, ASTAR_Cell *open[MAX_OPEN_LE
     return 0;
 }
 
-int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, ASTAR_Cell **path_out)
+int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, ASTAR_Cell **path_out, int *pathlength)
 {
     if (path_out == NULL)
     {
         printf("**Output path isn't defined**\n");
-        return 0;
+        return 1;
     }
 
     // no idea if this makes it faster, but it dynamically alters
@@ -116,12 +116,12 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
     if (!ASTAR_IsValidPosition(g, startX, startY))
     {
         printf("**Start position is not in grid bounds**\n");
-        return 0;
+        return 1;
     }
     if (!ASTAR_IsValidPosition(g, goalX, goalY))
     {
         printf("**Goal position is not in grid bounds**\n");
-        return 0;
+        return 1;
     }
 
     // set start cell to open
@@ -186,7 +186,7 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
             if (ASTAR_OnNeighbour(g, current, open, &openLength, goalX, goalY, i))
             {
                 printf("**Open array overflow**\n");
-                return 0;
+                return 1;
             }
         }
     }
@@ -195,7 +195,7 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
     if (!pathFound)
     {
         printf("**No path is possible**\n");
-        return 0;
+        return 1;
     }
 
     // backtrack
@@ -208,7 +208,7 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
         if (i >= ASTAR_MAX_PATH_LENGTH)
         {
             printf("**Path longer than ASTAR_MAX_PATH_LENGTH**\n");
-            return 0;
+            return 1;
         }
 
         if (!current->parent)
@@ -226,5 +226,7 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
         path_out[m] = t;
     }
 
-    return i + 1;
+    (*pathlength) = i + 1;
+
+    return 0;
 }
