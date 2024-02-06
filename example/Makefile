@@ -1,23 +1,28 @@
+CC := gcc
+
 EXEC := ./build/main.out
 
 SRCDIR := ./src
-
 LIBDIR := ./lib
 INCLUDEDIR := ./include
+OBJDIR := ./obj
 
-CFLAGS := -Wall -g -I$(SRCDIR)/ -I$(INCLUDEDIR)/
+CFLAGS := -Wall -Wextra -g -I$(SRCDIR)/ -I$(INCLUDEDIR)/
 LFLAGS := -L$(SRCDIR)/ -L$(LIBDIR)/
 LDFLAGS := -lastar -lraylib -lpthread -lGL -ldl -lm
 
-SRCS := $(wildcard $(SRCDIR)/*.c)
-OBJS := $(SRCS:.c=.o)
+OBJS := $(wildcard $(SRCDIR)/*.c)
+OBJS := $(OBJS:.c=.o)
+OBJS := $(subst $(SRCDIR)/,$(OBJDIR)/,$(OBJS))
 
-%.o: %.c
-	$(CC) $< $(CFLAGS) -c -o $@
+MKDIR := mkdir -p
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) -c $< $(CFLAGS) -o $@
 
 all: $(OBJS)
 	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $(EXEC) $(LDFLAGS)
 
 clean:
-	rm -rf $(SRCDIR)/*.o
-	rm -rf $EXEC
+	rm -rf $(OBJS)
+	rm -rf EXEC
