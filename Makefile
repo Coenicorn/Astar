@@ -9,7 +9,7 @@ OBJDIR := ./obj
 
 CFLAGS := -Wall -Wextra -g -I$(SRCDIR)/ -I$(INCLUDEDIR)/
 LFLAGS := -L$(SRCDIR)/ -L$(LIBDIR)/
-LDFLAGS := -lastar
+LDFLAGS := 
 
 OBJS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(OBJS:.c=.o)
