@@ -1,12 +1,10 @@
 #!/usr/bin/bash
 
-SCRIPTPATH=$(dirname "$0")
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-cd $SCRIPTPATH
+make -C $SCRIPT_DIR clean
+make -C $SCRIPT_DIR all
 
-make clean
-make all
+ar -crs $SCRIPT_DIR/lib/libastar.a $(find $SCRIPT_DIR/obj -maxdepth 2 -name "*.o")
 
-ar -crs ./lib/libastar.a $(find ./obj -maxdepth 2 -name "*.o")
-
-echo "libastar.a generated in $SCRIPTPATH/lib!"
+echo "libastar.a generated in $SCRIPT_DIR/lib!"

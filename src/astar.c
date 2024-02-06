@@ -16,8 +16,25 @@ If you're actually reading this, enjoy! (What are you doing tho?)
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "astar.h"
+
+// define to print every algorithm step to console
+#define VISUALIZE
+
+#ifdef VISUALIZE
+
+    // define to make program run at a step-by-step fps rate
+    #define VIS_STRICT
+
+    #define VIS_STEPS_PER_FRAME 50
+
+    #define VIS_FPS 20
+    
+    #define VIS_FPS_CLOCK ((float)(CLOCKS_PER_SEC) / (float)(VIS_FPS))
+
+#endif // VISUALISE
 
 #define WEIGHT 1
 
@@ -28,13 +45,25 @@ const int dirsY[8] = {0, -1, 0, 1, -1, 1, -1, 1};
 
 int MAX_OPEN_LENGTH;
 
+#ifdef VIS_STRICT
+
+static void sleep_clk(clock_t cycle)
+{
+    clock_t last = clock() + cycle, next;
+
+    while ((next = clock()) < last)
+        ;;
+}
+
+#endif // VISUALIZE
+
 static double ASTAR_Heuristic(int dX, int dY)
 {
     // return sqrt(dX * dX + dY * dY);
     return dX + dY;
 }
 
-static void ASTAR_SqueezeOpen(ASTAR_Cell *openIn[MAX_OPEN_LENGTH], int *len)
+static void ASTAR_SqueezeOpen(ASTAR_Cell *openIn[], int *len)
 {
     *len += 8;
 
@@ -145,6 +174,15 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
 
     ASTAR_Cell *current = open[0];
 
+#ifdef VISUALIZE
+
+    clock_t clock_next = clock();
+
+    int iteration = 0;
+    int steps = 0;
+
+#endif // VISUALIZE
+    
     // main pathfinding loop
     while (!pathFound)
     {
@@ -189,7 +227,41 @@ int ASTAR_Pathfind(ASTAR_Grid *g, int startX, int startY, int goalX, int goalY, 
                 return 1;
             }
         }
+
+        iteration++;
+
+#ifdef VISUALIZE
+
+        long diff = clock_next - clock();
+
+
+#ifdef VIS_STRICT
+        if (diff >= 0 && steps >= VIS_STEPS_PER_FRAME) 
+        {
+            sleep_clk(diff);
+        }
+#endif // VIS_STRICT
+
+        if (clock() >= clock_next)
+        {
+            ASTAR_PrintGrid(g);
+            printf("iteration %i\n", iteration);
+
+            steps = 0;
+            clock_next = clock() + VIS_FPS_CLOCK;
+        }
+
+        steps++;
+
+#endif // VISUALIZE
     }
+
+#ifdef VISUALIZE
+
+    ASTAR_PrintGrid(g);
+    printf("iteration %i\n", iteration);
+
+#endif // VISUALIZE
 
     // loop exited but there's no path, no path is possible
     if (!pathFound)

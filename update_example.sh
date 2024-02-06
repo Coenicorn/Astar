@@ -1,14 +1,12 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
-SCRIPTPATH=$(dirname "$0")
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-cd $SCRIPTPATH
+bash $SCRIPT_DIR/make_staticlib.sh
 
-bash ./make_staticlib.sh
+rm -rf $SCRIPT_DIR/example/lib/libastar.a $SCRIPT_DIR/example/include/astar.h
 
-rm -rf ./example/lib/libastar.a ./example/include/astar.h
+cp $SCRIPT_DIR/lib/libastar.a $SCRIPT_DIR/example/lib
+cp $SCRIPT_DIR/include/astar.h $SCRIPT_DIR/example/include
 
-cp ./lib_files/libastar.a ./example/lib
-cp ./lib_files/astar.h ./example/include
-
-echo "updated the binaries and headers in $SCRIPTPATH/example!"
+echo "updated the binaries and headers in $SCRIPT_DIR/example!"

@@ -1,9 +1,3 @@
-.vscode
-!example/build
-!example/bin
-example/build/*
-src/main.c
-
 build/*.out
 build/*.exe
 lib/*.a
@@ -13,3 +7,5 @@ example/build/*.out
 example/build/*.exe
 example/lib/*.a
 example/obj/*.o
+
+.vscode
